@@ -1,0 +1,15 @@
+ id property_type size rent region         price  school metro hospital shopping_mall sold  
+ -- ------------- ---- ---- -------------- ------ ------ ----- -------- ------------- ----- 
+  1 Apartment     1    rent Montreal East  450$   true   true  false    false         false
+ 10 Residential   3    rent Montreal East  1080$  true   true  false    true          false
+ 13 Residential   1    sale Montreal West  45000$ true   true  false    true          false
+ 14 Residential   4    sale Montreal South 45000$ true   true  false    true          false
+ 17 Residential   4    Rent Montreal North 1600$  true   true  true     true          false
+ 18 Residential   4    Rent Montreal South 1600$  true   true  true     false         false
+ 19 Residential   4    Rent Montreal West  1400$  true   true  true     false         false
+ 20 Residential   4    Rent Montreal West  1400$  true   false true     false         false
+ 21 Residential   4    Rent Montreal East  1200$  true   false true     false         false
+ 22 Residential   1    Rent Montreal East  300$   true   false true     false         false
+ 23 Residential   1    Rent Montreal East  300$   true   true  true     false         false
+ 24 Residential   1    Rent Montreal West  300$   true   true  true     false         false
+ 25 Apartment     1    Rent Montreal South 480$   true   true  true     true          false
