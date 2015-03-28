@@ -20,7 +20,7 @@
  <button>Make an offer</button>
  <button>Buy</button>
   </td>
-  <td width="200"><table>
+  <td width="210"><table>
     <tr><td>Property Type : House</td></tr> 
     <tr><td>Price         : $750/month</td> </tr>
     <tr><td>Property Size : 2 1/2</td> </tr>
