@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+
+@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -15,7 +16,7 @@
   </tr>
   <tr>
  <td>
- <img src="${pageContext.request.contextPath}/resources/images/1.jpg" height="200" width="300">
+ <img src="${pageContext.request.contextPath}/resources/images/1.jpg" height="200" width="300"/>
  <button>Make an offer</button>
  <button>Buy</button>
   </td>
