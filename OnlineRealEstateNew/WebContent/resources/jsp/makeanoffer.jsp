@@ -15,7 +15,7 @@
 
 <table width="80%" height="100%">
 <tr><td>
-//checking repository
+//checking repository.
 
 First name:
 <input type="text" name="firstname" >
