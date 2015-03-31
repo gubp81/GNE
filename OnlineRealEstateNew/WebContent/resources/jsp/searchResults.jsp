@@ -19,7 +19,7 @@
   <tr>
  <td>
  <img src="data:image/jpeg;base64,${list.encodedImage}" width="300" height="200"/><br>
- <input type="button" name="Make an offer" value="Make an offer" onclick="window.location = 'resources/jsp/makeanoffer.jsp' " />
+ <input type="button" name="Make an offer" value="${list.propertyID}" onclick="window.location = 'resources/jsp/offer.jsp' " />
  <br>
  Posted on			  : ${list.postDate}<br>
  Number of Offers made: ${list.offers}

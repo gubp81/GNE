@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="header.jsp"></jsp:include>
 <div class="esu">
-<form action="test" method="post">
+<form action="search" method="GET">
 <table width="80%" height="100%">
 <tr><td>
 Property Type<select name="propType" class="select">

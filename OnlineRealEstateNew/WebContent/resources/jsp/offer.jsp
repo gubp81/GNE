@@ -8,7 +8,7 @@
 </head>
 <jsp:include page="header.jsp"></jsp:include>
 <body>
-<form>
+<form action="offer" method="post">
 <div class="esu">
 <h1>Make an Offer</h1>
 
@@ -17,24 +17,20 @@
 <tr><td>
 //checking repository.
 
-First name:
-<input type="text" name="firstname" >
-<br>
-Last name:
-<input type="text" name="lastname">
-<br>
-Offer Price:
-<input type="text" name="offerprice">
+Name:
+<input type="text" name="name" >
 <br>
 Phone Number:
-<input type="text" name="phonenumber">
+<input type="text" name="phone">
 <br>
 Email:
 <input type="text" name="email">
 <br>
-
+Offer Price:
+<input type="text" name="amount">
+<br>
 <input type="submit" value="Submit">
-<input type="button" name="Cancel" value="Cancel" onclick="window.location = 'resources/jsp/body2.jsp' " />
+<input type="button" name="Cancel" value="Cancel" onclick="history.go(-1);" />
 </form></body>
 </div>
 

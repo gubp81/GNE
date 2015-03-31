@@ -15,39 +15,40 @@ import com.main.beans.PropertyBean;
 import com.main.dao.PropertyDao;
 
 @Controller
-
 public class MainController {
+
 	@Autowired
 	PropertyDao propdao;
-	@RequestMapping(value="/test", method=RequestMethod.POST)
-	   public ModelAndView PropertySearchSelect(@RequestParam("propType") String propType,
-			   @RequestParam("size") String size,
-			   @RequestParam("price") String price,
-			   @RequestParam("region") String region,
-			   @RequestParam("sort") String sort,
-			   @RequestParam(required=false, value="school") boolean school,
-			   @RequestParam(required=false, value="metro") boolean metro,
-			   @RequestParam(required=false, value="hospital") boolean hospital,
-			   @RequestParam(required=false, value="shopping_mall") boolean shopping_mall
-			   ) {
-		List<PropertyBean> list=null;
-		
-			System.out.println("Values:"+propType+ "size:"+size+"Sort by:"+sort);
-			list=propdao.searchAny(propType,
-					size,
-					price,
-					region,
-					sort,
-					school,
-					metro,
-					hospital,
-					shopping_mall
-					);
-			if(list.size()==0){
-				return new ModelAndView("error","list",list);
-			}
-		return new ModelAndView("body1", "list",list);
-	}
-	
-	}
 
+	@RequestMapping(value="/search", method=RequestMethod.GET)
+	public ModelAndView PropertySearchSelect(@RequestParam("propertyid") int propertyid,
+			@RequestParam("propType") String propType,
+			@RequestParam("size") String size,
+			@RequestParam("price") String price,
+			@RequestParam("region") String region,
+			@RequestParam("sort") String sort,
+			@RequestParam(required=false, value="school") boolean school,
+			@RequestParam(required=false, value="metro") boolean metro,
+			@RequestParam(required=false, value="hospital") boolean hospital,
+			@RequestParam(required=false, value="shopping_mall") boolean shopping_mall
+			) {
+		List<PropertyBean> list=null;
+
+		System.out.println("Values:"+propType+ "size:"+size+"Sort by:"+sort);
+		list=propdao.searchAny(
+				propertyid,
+				propType,
+				size,
+				price,
+				region,
+				sort,
+				school,
+				metro,
+				hospital,
+				shopping_mall
+				);
+		if(list.size()==0)
+			return new ModelAndView("error","list", list);
+		return new ModelAndView("searchResults", "list", list);
+	}
+}

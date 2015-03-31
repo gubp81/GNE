@@ -13,6 +13,7 @@ import java.util.Date;
  *
  */
 public class PropertyBean {
+	private int propertyid;
 	private String address;
 	private byte[] image;
 	private Date postDate;
@@ -31,7 +32,21 @@ public class PropertyBean {
 	private String shoppingMallValue;
 	private String description;
 	private String encodedImage;
-/**
+
+	/**
+	 * @return the propertyid
+	 */
+	public int getpropertyid() {
+		return propertyid;
+	}
+
+	/**
+	 * @return the propertyid
+	 */
+	public void setpropertyid(int propertyid) {
+		this.propertyid = propertyid;
+	}
+	/**
 	 * @return the address
 	 */
 	public String getAddress() {
@@ -47,15 +62,15 @@ public class PropertyBean {
 	/**
 	 * @return the nearby
 	 */
-//	public String getNearby() {
-//		return nearby;
-//	}
-//	/**
-//	 * @param nearby the nearby to set
-//	 */
-//	public void setNearby(String nearby) {
-//		this.nearby = nearby;
-//	}
+	//	public String getNearby() {
+	//		return nearby;
+	//	}
+	//	/**
+	//	 * @param nearby the nearby to set
+	//	 */
+	//	public void setNearby(String nearby) {
+	//		this.nearby = nearby;
+	//	}
 	/**
 	 * @return the price
 	 */
@@ -90,21 +105,21 @@ public class PropertyBean {
 		this.type = type;
 	}
 	public String getRegion() {
-		
+
 		return region;
 	}
 	public void setRegion(String region) {
 		this.region = region;
 	}
-    public boolean getSchool() {
-		
+	public boolean getSchool() {
+
 		return school;
 	}
 	public void setSchool(boolean school) {
 		this.school = school;
 	}
-public boolean isHospital() {
-		
+	public boolean isHospital() {
+
 		return hospital;
 	}
 	public void setHospital(boolean hospital) {
@@ -246,11 +261,10 @@ public boolean isHospital() {
 	public void setOffers(int offers) {
 		this.offers = offers;
 	}
-	
-	
-	}
 
 
-	
-	
-	
+}
+
+
+
+
