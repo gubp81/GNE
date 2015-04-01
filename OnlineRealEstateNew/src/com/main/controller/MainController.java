@@ -1,5 +1,5 @@
 /**
- * 
+ * Class MainController that controls all requests from pages
  */
 package com.main.controller;
 import java.util.List;
@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.main.beans.OfferBean;
 import com.main.beans.PropertyBean;
 import com.main.dao.PropertyDao;
 
 @Controller
 public class MainController {
 
+	List<PropertyBean> list=null;
 	@Autowired
 	PropertyDao propdao;
-
 	@RequestMapping(value="/search", method=RequestMethod.GET)
-	public ModelAndView PropertySearchSelect(@RequestParam("propertyid") int propertyid,
+	public ModelAndView PropertySearchSelect(
 			@RequestParam("propType") String propType,
 			@RequestParam("size") String size,
 			@RequestParam("price") String price,
@@ -36,7 +37,6 @@ public class MainController {
 
 		System.out.println("Values:"+propType+ "size:"+size+"Sort by:"+sort);
 		list=propdao.searchAny(
-				propertyid,
 				propType,
 				size,
 				price,
@@ -51,4 +51,34 @@ public class MainController {
 			return new ModelAndView("error","list", list);
 		return new ModelAndView("searchResults", "list", list);
 	}
+	@RequestMapping(value="/offer", method=RequestMethod.GET)
+	public ModelAndView navigate(){
+		boolean result=propdao.offer();
+		return new ModelAndView("offer","result",result);
+	}
+
+	@RequestMapping(value="/makeanoffer", method=RequestMethod.POST)
+	public ModelAndView makeanOffer(
+			@RequestParam("name") String name,
+			@RequestParam("email") String email,
+			@RequestParam("phone") String phone,
+			@RequestParam("amount") String amount)
+	{
+		OfferBean bean=new OfferBean();
+		//		bean.setId(id);
+		bean.setName(name);
+		bean.setAmount(amount);
+		bean.setPhone(phone);
+		bean.setEmail(email);
+		System.out.println("Came to controller");
+		boolean posted=false;
+		posted = propdao.makeanOffer(name, phone, email, amount); 
+		if (posted){
+
+			return new ModelAndView("success","list",bean);
+		}
+
+		return new ModelAndView("failure","result",posted);			
+	}
+
 }

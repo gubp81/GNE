@@ -6,6 +6,8 @@ package com.main.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
 
 import javax.sql.DataSource;
 
@@ -17,7 +19,7 @@ import com.main.beans.PropertyBean;
 import com.main.util.PropertyExtractor;
 
 /**
- * @author test
+ * @author Eswharreddy
  *
  */
 public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
@@ -31,7 +33,6 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 	}
 	//	@Override
 	public List<PropertyBean> searchAny(
-			int propertyid,
 			String propType,
 			String size,
 			String price,
@@ -42,71 +43,43 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			boolean hospital,
 			boolean shopping_mall
 			){
-		String sql="select * from \"Property\" ";
 
-		if(!propType.equals("Click to Select")){
-			sql+=" WHERE propType='"+propType+"'";
-		}
+		// Requirement to only show sold properties in past 15 days		
+		Calendar cal = Calendar.getInstance();
+		cal.set(1, 2, 3);
+		cal.add(3,-15);
 
-		if(sql.indexOf("WHERE")==-1){
-			if(!size.equals("Click to Select"))
-				sql+=" WHERE size='"+size+"'";
-		}
-		else{
-			if(!size.equals("Click to Select"))
-				sql += " and size='"+size+"'";
-		}
+		String sql="select * from \"Property\" where ( sold is FALSE"
+				+  " or solddate::date > '"+cal.get(1)+"-"+cal.get(2)+"-"+cal.get(3)+"' )";
+		System.out.println("SQL: "+sql);
 
-		if(sql.indexOf("WHERE")==-1){
-			if(!price.equals("Click to Select"))
-				sql+=" WHERE price='"+price+"'";
+		if(!propType.equals("Click to Select"))
+			sql+=" and propType='"+propType+"'";
+		if(!size.equals("Click to Select"))
+			sql += " and size='"+size+"'";
+		if(!price.equals("Click to Select")){
+			if(price.startsWith(String.valueOf('1')))
+			sql += " and price<'50000'";
+			if(price.startsWith(String.valueOf('2')))
+			sql += " and price>='50000' and price<'100000'";
+			if(price.startsWith(String.valueOf('3')))
+			sql += " and price>='100000' and price<'200000'";
+			if(price.startsWith(String.valueOf('4')))
+			sql += " and price>='200000' and price<'300000'";
+			if(price.startsWith(String.valueOf('5')))
+			sql += " and price>='300000'";
 		}
-		else{
-			if(!price.equals("Click to Select"))
-				sql += " and price='"+price+"'";
-		}
-
-		if(sql.indexOf("WHERE")==-1){
-			if(!region.equals("Click to Select"))
-				sql+=" WHERE region='"+region+"'";
-		}
-		else{
-			if(!region.equals("Click to Select"))
-				sql += " and region='"+region+"'";
-		}
-
-		if(sql.indexOf("WHERE")==-1){
-			if(school)
-				sql+=" WHERE school='"+school+"'";
-		}
-		else{
-			if(school)
-				sql+=" and school='"+school+"'";
-		}
-		if(sql.indexOf("WHERE")==-1){
-			if(metro)
-				sql+=" WHERE metro='"+metro+"'";
-		}
-		else{
-			if(metro)
-				sql+=" and metro='"+metro+"'";
-		}
-		if(sql.indexOf("WHERE")==-1){
-			if(hospital)
-				sql+=" WHERE hospital='"+hospital+"'";
-		}
-		else{
-			if(hospital)
-				sql+=" and hospital='"+hospital+"'";
-		}
-		if(sql.indexOf("WHERE")==-1){
-			if(shopping_mall)
-				sql+=" WHERE shopping_mall='"+shopping_mall+"'";
-		}
-		else{
-			if(shopping_mall)
-				sql+=" and shopping_mall='"+shopping_mall+"'";
-		}
+		
+		if(!region.equals("Click to Select"))
+			sql += " and region='"+region+"'";
+		if(school)
+			sql+=" and school='"+school+"'";
+		if(metro)
+			sql+=" and metro='"+metro+"'";
+		if(hospital)
+			sql+=" and hospital='"+hospital+"'";
+		if(shopping_mall)
+			sql+=" and shopping_mall='"+shopping_mall+"'";
 		if(sort.equals("low to high")){
 			sql+=" order by price asc";
 		}
@@ -118,21 +91,54 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 	}
 
 	@Override
-	public boolean offer(String name,
-			String email,
+	public boolean makeanOffer(String name,
 			String phone,
+			String email,			
 			String amount
 			){
-		String sql="Insert into \"Buyer\" ( name, phone, email) VALUES ('"+name+"','"+phone+"','"+email+"')";
-		getJdbcTemplate().update(sql);
+		boolean result = false;
+		int buyer, property = 0;
+		String sql;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(1, 2, 3);
 
-		sql="Insert into \"Offer\" ( name, phone, email) VALUES ('"+name+"','"+phone+"','"+email+"')";
-		getJdbcTemplate().update(sql);
-
-		return true;
+		String getUser="Select userid from \"User\" where email ='"+email+"'";
+		System.out.println("SQL: "+getUser);
+		buyer=getJdbcTemplate().queryForInt(getUser);
+		if (buyer==0) {
+			System.out.println("User not found");	
+			sql="Insert into \"User\" ( name, phone, email, type) VALUES ('"+name+"','"+phone+"','"+email+"',1)";
+			System.out.println("SQL: "+sql);
+			buyer=getJdbcTemplate().queryForInt(getUser);;			
+		}
+		System.out.println("User found: "+buyer);	
+		
+		sql= getUser="Select propertyid from \"Offer\" where buyerid ='"+buyer+"'";
+		property = getJdbcTemplate().queryForInt(sql);
+		
+		if(property!=0){
+			System.out.println("Buyer already posted offer to property: "+property);
+	      return result;
+		}
+		sql="Insert into \"Offer\" ( buyerid, propertyid, amount, date) VALUES ('"+buyer+"','"+buyer+"','"+amount+"','"+cal.get(1)+"-"+cal.get(2)+"-"+cal.get(3)+"')";
+		System.out.println("SQL: "+sql);
+		int row=getJdbcTemplate().update(sql);
+		if(row==1){
+			sql="Update \"Property\" set offersmade = offersmade + 1 where propertyid = "+property;
+			row=getJdbcTemplate().update(sql);
+			if(row==1)
+			result=true;
+		}
+		return result;
 	}
-
+	@Override
+	public boolean offer(){
+		boolean result=true;
+		return result;
+	}
 }
+
 class PropertyRowMapper implements RowMapper<PropertyBean>{
 
 	@Override  

@@ -9,6 +9,7 @@
 </head>
 <body>
 <jsp:include page="header.jsp"></jsp:include>
+<form action="offer" method="get">
 <c:forEach var="list" items="${list}">
 <table style="width:100%;background-color:white;" border="1">
   <tr>
@@ -19,7 +20,9 @@
   <tr>
  <td>
  <img src="data:image/jpeg;base64,${list.encodedImage}" width="300" height="200"/><br>
- <input type="button" name="Make an offer" value="${list.propertyID}" onclick="window.location = 'resources/jsp/offer.jsp' " />
+<%--  <input type="hidden" name="${list.address}"> --%>
+ <input type="submit" name="Make an Offer" value="Make an Offer" />
+ 
  <br>
  Posted on			  : ${list.postDate}<br>
  Number of Offers made: ${list.offers}
@@ -45,6 +48,7 @@
 
   </table>
 </c:forEach>
+</form>
 <jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

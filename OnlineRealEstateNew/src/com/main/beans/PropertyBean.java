@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 /**
- * @author test
+ * @author Eswarreddy
  *
  */
 public class PropertyBean {

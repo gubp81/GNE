@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Offer Page</title>
 </head>
 <jsp:include page="header.jsp"></jsp:include>
 <body>
-<form action="offer" method="post">
+<form action="makeanoffer" method="post">
 <div class="esu">
 <h1>Make an Offer</h1>
 

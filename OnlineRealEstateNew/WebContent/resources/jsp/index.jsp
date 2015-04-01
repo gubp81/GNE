@@ -29,13 +29,13 @@ Property Type<select name="propType" class="select">
 </select>
 </tr>
 <tr><td>
-Price Range<select name="price" class="select">
+Price From<select name="price" class="select">
 <option>Click to Select</option>
-<option>less than 500</option>
-<option>500 to 1000</option>
-<option>1000 to 2000</option>
-<option>2000 to 5000</option>
-<option>5000 to 10000</option>
+<option>1-less than 50,000</option>
+<option>2-50,000 to 100,000</option>
+<option>3-100,000 to 200,000</option>
+<option>4-200,000 to 300,000</option>
+<option>5-more than 300,000</option>
 </select>
 </td>
 <td>Region<select name="region" class="select">

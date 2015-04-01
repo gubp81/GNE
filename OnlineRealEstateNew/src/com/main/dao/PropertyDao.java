@@ -13,7 +13,6 @@ import com.main.beans.*;
 public interface PropertyDao {
 
 	public List<PropertyBean> searchAny(
-			int propertyid,
 			String property_type,
 			String size,
 			String price,
@@ -25,7 +24,9 @@ public interface PropertyDao {
 			boolean shopping_mall
 			);
 	
-	public boolean offer(String name,
+	public boolean offer( );
+	
+	public boolean makeanOffer(String name,
 			String phone,
 			String email,
 			String amount
