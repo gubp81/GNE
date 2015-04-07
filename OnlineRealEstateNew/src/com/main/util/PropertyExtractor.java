@@ -1,5 +1,5 @@
 /**
- * 
+ * @author Eswharreddy
  */
 package com.main.util;
 
@@ -10,13 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.main.beans.PropertyBean;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
-
-/**
- * @author test
- *
- */
 public class PropertyExtractor implements ResultSetExtractor<PropertyBean> {
 	@Override
 	public PropertyBean extractData(ResultSet rs) throws SQLException,
@@ -24,15 +18,28 @@ public class PropertyExtractor implements ResultSetExtractor<PropertyBean> {
 		PropertyBean prop = new PropertyBean();
 		prop.setpropertyid(rs.getInt("propertyid"));
 		prop.setAddress(rs.getString("address"));
-		prop.setImage(rs.getBytes("propImage"));
 		prop.setPostDate(rs.getDate("postDate"));
 		prop.setOffers(rs.getInt("offersMade"));
 		prop.setType(rs.getString("propType"));
 		prop.setSize(rs.getInt("size"));
 		prop.setPrice(rs.getString("price"));
 		prop.setRegion(rs.getString("region"));
-		prop.setSchool(rs.getBoolean("school"));
+		prop.setYear(rs.getInt("year"));			
 		prop.setDescription(rs.getString("description"));
+
+		
+		if(rs.getBoolean("garage")){
+			prop.setGarageValue("Garage");
+		}
+
+		if(rs.getBoolean("pool")){
+			prop.setPoolValue("Pool");
+		}
+
+		if(rs.getBoolean("ac")){
+			prop.setacValue("A/C");
+		}
+	
 		if(rs.getBoolean("school")){
 			prop.setSchoolValue("School");
 		}
@@ -48,9 +55,9 @@ public class PropertyExtractor implements ResultSetExtractor<PropertyBean> {
 		if(rs.getBoolean("shopping_mall")){
 			prop.setShoppingMallValue("Shopping Mall");
 		}
-		System.out.println("image:"+prop.getImage());
-		prop.setEncodedImage(Base64.encode(prop.getImage()));
-		System.out.println("encodedimage:"+prop.getEncodedImage());
+	      if(rs.getBoolean("sold")){
+	    	  prop.setSoldValue("Sold");
+	      }		
 		return prop;
 
 	}

@@ -8,6 +8,9 @@
 }
 .head{
 	background-color: #FFDEAD;
+	height: 10px;
+	width: 100%;
+	border: none;
 }
 .center {
     margin-left: auto;

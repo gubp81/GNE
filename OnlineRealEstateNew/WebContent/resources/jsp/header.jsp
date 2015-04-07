@@ -7,15 +7,12 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/myStyles.css">
 </head>
 <body class="head">
-<div style="width: 100%;min-height: 20%;">
-<p>
-<table>
-<tr><td><img src="${pageContext.request.contextPath}/resources/images/2.png" height="100"></td>
-<td width="500" class="center" ><h1>GNE Properties welcomes you</h1></td>
-
+<table border=0>
+<tr height="50px"><td	width=5%><img src="${pageContext.request.contextPath}/resources/images/2.png"height="50"></td>
+<td class="center" width=80%><h2>GNE Properties: Find your home-Realize your dreams!</h2></td>
 <td><a href="${pageContext.request.contextPath}/resources/jsp/index.jsp">Home</a></td>
-<td><a href="${pageContext.request.contextPath}/resources/contact.jsp" style="padding-right: 10">Contact Us</a></td>
+<td><a href="mailto:propertiesGNE@gmail.com?Subject=Contact Us" target="_top">Contact Us</a></td>
+</tr>
 </table>
-</div>
 </body>
 </html>

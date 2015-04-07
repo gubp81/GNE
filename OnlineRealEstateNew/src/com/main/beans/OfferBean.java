@@ -1,15 +1,10 @@
 /**
- * 
+ * @author Gustavo Pereira
  */
 package com.main.beans;
 
 import java.util.Date;
 
-
-/**
- * @author Gustavo Pereira
- *
- */
 public class OfferBean {
 	private int propertyid;
 	private String name;
@@ -19,14 +14,14 @@ public class OfferBean {
 	/**
 	 * @return the propertyid
 	 */
-	public int getpropertyid() {
+	public int getPropertyId() {
 		return propertyid;
 	}
 
 	/**
 	 * @return the propertyid
 	 */
-	public void setpropertyid(int propertyid) {
+	public void setPropertyId(int propertyid) {
 		this.propertyid = propertyid;
 	}
 

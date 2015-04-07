@@ -23,11 +23,14 @@ public class MainController {
 	PropertyDao propdao;
 	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public ModelAndView PropertySearchSelect(
-			@RequestParam("propType") String propType,
+			@RequestParam("proptype") String proptype,
 			@RequestParam("size") String size,
 			@RequestParam("price") String price,
 			@RequestParam("region") String region,
-			@RequestParam("sort") String sort,
+			@RequestParam("sort") String sort,		
+			@RequestParam(required=false, value="garage") boolean garage,
+			@RequestParam(required=false, value="pool") boolean pool,
+			@RequestParam(required=false, value="ac") boolean ac,			
 			@RequestParam(required=false, value="school") boolean school,
 			@RequestParam(required=false, value="metro") boolean metro,
 			@RequestParam(required=false, value="hospital") boolean hospital,
@@ -35,13 +38,28 @@ public class MainController {
 			) {
 		List<PropertyBean> list=null;
 
-		System.out.println("Values:"+propType+ "size:"+size+"Sort by:"+sort);
+		System.out.println("Search Values:"+
+				proptype+
+				size+
+				price+
+				region+
+				sort+
+				garage+
+				pool+
+				ac+
+				school+
+				metro+
+				hospital+
+				shopping_mall);
 		list=propdao.searchAny(
-				propType,
+				proptype,
 				size,
 				price,
 				region,
 				sort,
+				garage,
+				pool,
+				ac,
 				school,
 				metro,
 				hospital,
@@ -52,30 +70,32 @@ public class MainController {
 		return new ModelAndView("searchResults", "list", list);
 	}
 	@RequestMapping(value="/offer", method=RequestMethod.GET)
-	public ModelAndView navigate(){
-		boolean result=propdao.offer();
-		return new ModelAndView("offer","result",result);
+	public ModelAndView MakeanOffer(
+			@RequestParam("propertyid") int propertyid			){
+		PropertyBean property = propdao.getDetails(propertyid);
+		return new ModelAndView("offer","property",property);		
 	}
 
 	@RequestMapping(value="/makeanoffer", method=RequestMethod.POST)
 	public ModelAndView makeanOffer(
+			@RequestParam("propertyid") int propertyid,
 			@RequestParam("name") String name,
 			@RequestParam("email") String email,
 			@RequestParam("phone") String phone,
 			@RequestParam("amount") String amount)
 	{
 		OfferBean bean=new OfferBean();
-		//		bean.setId(id);
+		bean.setPropertyId(propertyid);
 		bean.setName(name);
 		bean.setAmount(amount);
 		bean.setPhone(phone);
 		bean.setEmail(email);
-		System.out.println("Came to controller");
+		System.out.println("Came to controller makeanOffer");
 		boolean posted=false;
-		posted = propdao.makeanOffer(name, phone, email, amount); 
+		posted = propdao.makeanOffer(propertyid, name, phone, email, amount); 
 		if (posted){
 
-			return new ModelAndView("success","list",bean);
+			return new ModelAndView("posted","list",bean);
 		}
 
 		return new ModelAndView("failure","result",posted);			

@@ -1,19 +1,13 @@
 /**
- * 
+ * @author Eswarreddy
  */
 package com.main.beans;
 
 import java.util.Date;
 
-
-
-
-/**
- * @author Eswarreddy
- *
- */
 public class PropertyBean {
 	private int propertyid;
+	private String soldValue;	
 	private String address;
 	private byte[] image;
 	private Date postDate;
@@ -33,6 +27,29 @@ public class PropertyBean {
 	private String description;
 	private String encodedImage;
 
+	
+	private boolean garage;
+	private boolean pool;
+	private boolean ac;
+	private String garageValue;
+	private String poolValue;
+	private String acValue;
+	private int year;
+	
+
+	/**
+	 * @return the year
+	 */
+	public int getYear() {
+		return year;
+	}
+	/**
+	 * @param year the year to set
+	 */
+	public void setYear(int year) {
+		this.year = year;
+	}	
+	
 	/**
 	 * @return the propertyid
 	 */
@@ -58,19 +75,7 @@ public class PropertyBean {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	//	private String nearby;
-	/**
-	 * @return the nearby
-	 */
-	//	public String getNearby() {
-	//		return nearby;
-	//	}
-	//	/**
-	//	 * @param nearby the nearby to set
-	//	 */
-	//	public void setNearby(String nearby) {
-	//		this.nearby = nearby;
-	//	}
+
 	/**
 	 * @return the price
 	 */
@@ -111,15 +116,36 @@ public class PropertyBean {
 	public void setRegion(String region) {
 		this.region = region;
 	}
-	public boolean getSchool() {
+	
+	public boolean getGarage() {
+		return garage;
+	}
+	public void setGarage(boolean garage) {
+		this.garage = garage;
+	}
 
+	public boolean getPool() {
+		return pool;
+	}
+	public void setPool(boolean pool) {
+		this.pool = pool;
+	}
+	
+	public boolean getAc() {
+		return ac;
+	}
+	public void setAc(boolean ac) {
+		this.ac = ac;
+	}
+	
+	public boolean getSchool() {
 		return school;
 	}
 	public void setSchool(boolean school) {
 		this.school = school;
 	}
+	
 	public boolean isHospital() {
-
 		return hospital;
 	}
 	public void setHospital(boolean hospital) {
@@ -151,11 +177,51 @@ public class PropertyBean {
 
 	}
 	/**
+	 * @return the garageValue
+	 */
+	public String getGarageValue() {
+		return garageValue;
+	}
+	/**
+	 * @param garageValue the garageValue to set
+	 */
+	public void setGarageValue(String garageValue) {
+		this.garageValue = garageValue;
+	}
+
+	/**
+	 * @return the poolValue
+	 */
+	public String getPoolValue() {
+		return poolValue;
+	}
+	/**
+	 * @param poolValue the poolValue to set
+	 */
+	public void setPoolValue(String poolValue) {
+		this.poolValue = poolValue;
+	}
+	
+	/**
+	 * @return the acValue
+	 */
+	public String getAcValue() {
+		return acValue;
+	}
+	/**
+	 * @param acValue the acValue to set
+	 */
+	public void setacValue(String acValue) {
+		this.acValue = acValue;
+	}
+	
+	/**
 	 * @return the schoolValue
 	 */
 	public String getSchoolValue() {
 		return schoolValue;
 	}
+	
 	/**
 	 * @param schoolValue the schoolValue to set
 	 */
@@ -262,7 +328,19 @@ public class PropertyBean {
 		this.offers = offers;
 	}
 
-
+	/**
+	 * @return the soldValue
+	 */
+	public String getSoldValue() {
+		return soldValue;
+	}
+	/**
+	 * @param soldValue the soldValue to set
+	 */
+	public void setSoldValue(String soldValue) {
+		this.soldValue = soldValue;
+	}
+	
 }
 
 
