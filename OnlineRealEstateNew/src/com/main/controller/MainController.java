@@ -104,13 +104,28 @@ public class MainController {
 				MailMail mm = (MailMail) context.getBean("MailMail");
 				   mm.sendMail(email,
 					   email,
-					   "Offer Confirmation", 
-					   "Hello "+name+". You are closer to your new home. Your offer is confirmed.");
+					   "GNE Properties: Offer Confirmation", 
+					   "Hello "+name+". You are closer to your new home! Your offer of $"+amount+" was sent to Seller's email. You will receive a email if offer is accepted.");
 			
+				   String sellersEmail = propdao.getSellersEmail(propertyid);
+
+				   MailMail mm2 = (MailMail) context.getBean("MailMail");
+					   mm2.sendMail(email,
+							   sellersEmail,
+						   "GNE Properties: Offer Received", 
+						   "Good news! You just got an offer posted for your property. "+name+" made an offer of $"+amount+". Please follow the link to accept or reject: http://localhost:8080/gne/acceptoffer?propertyid="+propertyid);
+				
+				   
 			return new ModelAndView("posted","list",bean);
 		}
 
 		return new ModelAndView("failure","result",posted);			
 	}
 
+	@RequestMapping(value="/decision", method=RequestMethod.POST)
+	public ModelAndView offerDecision( @RequestParam("propertyid") int propertyid ){
+		System.out.println("Controller cLass");
+		boolean result=propdao.offerDecision(propertyid);
+		return new ModelAndView("offeraccepted","result",result);
+	}
 }

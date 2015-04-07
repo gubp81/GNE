@@ -11,6 +11,7 @@ public class OfferBean {
 	private String phone;
 	private String email;
 	private String amount;	
+	private Date date;	
 	/**
 	 * @return the propertyid
 	 */
@@ -45,10 +46,10 @@ public class OfferBean {
 		return amount;
 	}
 	/**
-	 * @param amount the offerprice to set
+	 * @param i the offer price to set
 	 */
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setAmount(String i) {
+		this.amount = i;
 	}
 	/**
 	 * @return the phone
@@ -75,6 +76,19 @@ public class OfferBean {
 		this.email = email;
 	}
 
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * @return the date
+	 */
+	public void setDate(Date date) {
+		this.date = date;
+	}
 }
 
 

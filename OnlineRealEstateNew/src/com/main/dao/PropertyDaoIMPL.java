@@ -18,6 +18,9 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import com.main.beans.PropertyBean;
 import com.main.util.PropertyExtractor;
 
+import com.main.beans.OfferBean;
+import com.main.util.OfferExtractor;
+
 public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 	PropertyDaoIMPL()
 	{
@@ -104,6 +107,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			property = getJdbcTemplate().queryForObject(sql, new PropertyRowMapper());
 		return property;
 	}
+
+	@Override
+	public String getSellersEmail(int propertyid){
+			String sql = "select email from \"User\" INNER JOIN \"Property\" ON(\"User\".userid =  \"Property\".seller) where propertyid="+propertyid;
+			String email = (String) getJdbcTemplate().queryForObject(sql,String.class);
+		return email;
+	}
 	
 	@Override
 	public boolean makeanOffer(int propertyid,
@@ -113,7 +123,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			String amount
 			){
 		boolean result = false;
-		int buyer = 0 , property = 0;
+		int buyer = 0 , property = 0, row = 0;
 		String sql, sqlUser;
 
 		sqlUser="Select userid from \"User\" where email ='"+email+"'";
@@ -144,10 +154,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		}
 
 		sql="Insert into \"Offer\" ( buyerid, propertyid, amount, date) VALUES ('"+buyer+"','"+propertyid+"','"+amount+"',now())";
-		System.out.println("SQL: "+sql);
-		int row=getJdbcTemplate().update(sql);
+		System.out.println("SQL: "+sql);	
+		try {
+		row=getJdbcTemplate().update(sql);
+		} catch (DataAccessException e){	
+		}
 		if(row==1){
-			sql="Update \"Property\" set offersmade = offersmade + 1 where propertyid = "+property;
+			sql="Update \"Property\" set offersmade = offersmade + 1 where propertyid = "+propertyid;
 			row=getJdbcTemplate().update(sql);
 			if(row==1)
 				System.out.println("Offer successfully posted");
@@ -155,7 +168,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		}
 		return result;
 	}
+	
+	@Override  	
+	public boolean offerDecision(int propertyid){
+		System.out.println("Offer Decision");
 
+		return true;
+	}
 
 }
 
@@ -164,6 +183,15 @@ class PropertyRowMapper implements RowMapper<PropertyBean>{
 	@Override  
 	public PropertyBean mapRow(ResultSet resultSet, int line) throws SQLException {   
 		PropertyExtractor userExtractor = new PropertyExtractor();   
+		return userExtractor.extractData(resultSet);   
+	} 
+}
+
+class OfferRowMapper implements RowMapper<OfferBean>{
+
+	@Override  
+	public OfferBean mapRow(ResultSet resultSet, int line) throws SQLException {   
+		OfferExtractor userExtractor = new OfferExtractor();   
 		return userExtractor.extractData(resultSet);   
 	} 
 }
