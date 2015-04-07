@@ -5,6 +5,8 @@ package com.main.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.main.beans.OfferBean;
 import com.main.beans.PropertyBean;
 import com.main.dao.PropertyDao;
+import com.main.util.MailMail;
 
 @Controller
 public class MainController {
@@ -94,7 +97,16 @@ public class MainController {
 		boolean posted=false;
 		posted = propdao.makeanOffer(propertyid, name, phone, email, amount); 
 		if (posted){
-
+	
+				ApplicationContext context = 
+				        new ClassPathXmlApplicationContext("classpath*:Spring-Mail.xml");
+		   
+				MailMail mm = (MailMail) context.getBean("MailMail");
+				   mm.sendMail(email,
+					   email,
+					   "Offer Confirmation", 
+					   "Hello "+name+". You are closer to your new home. Your offer is confirmed.");
+			
 			return new ModelAndView("posted","list",bean);
 		}
 

@@ -18,10 +18,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import com.main.beans.PropertyBean;
 import com.main.util.PropertyExtractor;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.main.util.*;
-
 public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 	PropertyDaoIMPL()
 	{
@@ -155,21 +151,11 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			row=getJdbcTemplate().update(sql);
 			if(row==1)
 				System.out.println("Offer successfully posted");
-	    	sendEmail(name, email);
 				result=true;
 		}
 		return result;
 	}
-	private void sendEmail(String name, String email) {
-		ApplicationContext context = 
-		        new ClassPathXmlApplicationContext("/WEB-INF/Spring-Mail.xml");
-   
-		MailMail mm = (MailMail) context.getBean("MailMail");
-		   mm.sendMail(email,
-			   email,
-			   "Offer Confirmation", 
-			   "Hello "+name+". You are closer to your new home. Your offer is confirmed.");
-	}
+
 
 }
 
