@@ -16,10 +16,13 @@ public class OfferExtractor implements ResultSetExtractor<OfferBean> {
 	public OfferBean extractData(ResultSet rs) throws SQLException,
 	DataAccessException {
 		OfferBean offer = new OfferBean();
-		offer.setPropertyId(rs.getInt("propertyid"));
-//		offer.setAmount(rs.get("amount"));
-//		offer.setDate(rs.getInt("date"));
-	
+		offer.buyerid=rs.getInt("buyerid");
+		offer.propertyid=rs.getInt("propertyid");
+		offer.amount=rs.getString("amount");
+		offer.date=rs.getDate("date");
+		offer.name=rs.getString("name");
+		offer.phone=rs.getString("phone");
+		offer.email=rs.getString("email");
 		return offer;
 
 	}

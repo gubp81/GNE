@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import com.main.beans.PropertyBean;
 import com.main.util.PropertyExtractor;
-
 import com.main.beans.OfferBean;
 import com.main.util.OfferExtractor;
 
@@ -55,6 +54,8 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			sql+=" and proptype='"+proptype+"'";
 		if(!size.equals("Click to Select"))
 			sql += " and size='"+size+"'";
+
+		//Price ranges
 		if(!price.equals("Click to Select")){
 			if(price.startsWith(String.valueOf('1')))
 				sql += " and price<'100000'";
@@ -83,7 +84,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			sql+=" and hospital='"+hospital+"'";
 		if(shopping_mall)
 			sql+=" and shopping_mall='"+shopping_mall+"'";
-		
+
 		if(sort.equals("by Price: low to high")){
 			sql+=" order by price asc";
 		}
@@ -99,22 +100,22 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		List<PropertyBean> list = getJdbcTemplate().query(sql, new PropertyRowMapper());
 		return list;
 	}
-	
+
 	@Override
 	public PropertyBean getDetails(int propertyid){
 		PropertyBean property= new PropertyBean();
-			String sql = "select * from \"Property\" where propertyid="+propertyid;
-			property = getJdbcTemplate().queryForObject(sql, new PropertyRowMapper());
+		String sql = "select * from \"Property\" where propertyid="+propertyid;
+		property = getJdbcTemplate().queryForObject(sql, new PropertyRowMapper());
 		return property;
 	}
 
 	@Override
 	public String getSellersEmail(int propertyid){
-			String sql = "select email from \"User\" INNER JOIN \"Property\" ON(\"User\".userid =  \"Property\".seller) where propertyid="+propertyid;
-			String email = (String) getJdbcTemplate().queryForObject(sql,String.class);
+		String sql = "select email from \"User\" INNER JOIN \"Property\" ON (\"User\".userid =  \"Property\".seller) where \"Property\".propertyid="+propertyid;
+		String email = (String) getJdbcTemplate().queryForObject(sql,String.class);
 		return email;
 	}
-	
+
 	@Override
 	public boolean makeanOffer(int propertyid,
 			String name,
@@ -122,59 +123,88 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			String email,			
 			String amount
 			){
-		boolean result = false;
-		int buyer = 0 , property = 0, row = 0;
+		int buyer = 0, row = 0;
 		String sql, sqlUser;
 
 		sqlUser="Select userid from \"User\" where email ='"+email+"'";
 		System.out.println("SQL: "+sqlUser);
-		
+
 		try {
 			buyer=getJdbcTemplate().queryForInt(sqlUser);			
 		} catch (DataAccessException e){
+
+		}
+		if(buyer==0){
 			System.out.println("User not found");	
 			sql="Insert into \"User\" ( name, phone, email, type) VALUES ('"+name+"','"+phone+"','"+email+"',1)";
 			System.out.println("SQL: "+sql);
 			try {
+				buyer=getJdbcTemplate().update(sql);
 				buyer=getJdbcTemplate().queryForInt(sqlUser);
 			} catch (DataAccessException e1) {
 				e1.printStackTrace();
-			}			
+			}				
 		}
 		System.out.println("User found: "+ buyer);	
-		try {
-		sql="Select propertyid from \"Offer\" where propertyid = "+propertyid+"buyerid ="+buyer+"";
-		System.out.println("SQL: "+sql);
-		property = getJdbcTemplate().queryForInt(sql);
-		if(property!=0){
-			System.out.println("Buyer already posted an offer to this property: "+propertyid);
-			return result;
-		}		
-		} catch (DataAccessException e){	
-		}
 
 		sql="Insert into \"Offer\" ( buyerid, propertyid, amount, date) VALUES ('"+buyer+"','"+propertyid+"','"+amount+"',now())";
 		System.out.println("SQL: "+sql);	
 		try {
-		row=getJdbcTemplate().update(sql);
+			row=getJdbcTemplate().update(sql);
 		} catch (DataAccessException e){	
 		}
 		if(row==1){
+			//Increase number of offers for this Property
 			sql="Update \"Property\" set offersmade = offersmade + 1 where propertyid = "+propertyid;
 			row=getJdbcTemplate().update(sql);
 			if(row==1)
 				System.out.println("Offer successfully posted");
-				result=true;
+			return true;
 		}
-		return result;
+		return false;
 	}
-	
-	@Override  	
-	public boolean offerDecision(int propertyid){
-		System.out.println("Offer Decision");
 
-		return true;
+	@Override  	
+	public List<OfferBean> listOffers(int propertyid){
+		System.out.println("Offers");
+		//Requirement: Offers are only valid within 3 days
+		String sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+"and now()<=date+3";
+		System.out.println("SQL: "+sql);	
+		List<OfferBean> offers = getJdbcTemplate().query(sql, new OfferRowMapper());
+		System.out.println("OfferRowMapper OK");
+		return offers;
 	}
+
+
+	@Override
+	public OfferBean offerDecision(int propertyid, int buyerid, String decision){
+		int row = 0;        
+		String sql;
+		OfferBean offer= new OfferBean();
+		try {
+			if(decision=="Accept"){
+				sql="Update \"Offer\" set isaccepted = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
+				row=getJdbcTemplate().update(sql);
+				if(row==1){
+					sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+" and buyerid = "+buyerid;
+					offer = getJdbcTemplate().queryForObject(sql, new OfferRowMapper());
+
+					sql="Update \"Property\" set solddate = now(), sold = true where propertyid = "+propertyid;
+					row=getJdbcTemplate().update(sql);
+					offer.isaccepted = true;
+				}	
+			}
+			else if(decision=="Reject"){
+				sql="Update \"Offer\" set isrejected = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
+				row=getJdbcTemplate().update(sql);	
+				offer.isrejected = true;
+			}
+		}
+		catch (DataAccessException e){	
+		}
+		return offer;
+	}
+
 
 }
 

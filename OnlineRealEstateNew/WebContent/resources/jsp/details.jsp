@@ -155,9 +155,8 @@
 		var map;
 		var infowindow;
 		var LatLng;
-		var geocoder = new google.maps.Geocoder();
-		var propertyAddress = "4975 Jean-Talon West  Montreal, Quebec  H4P 1W7";       
-//		var propertyAddress = ${property.address};
+		var geocoder = new google.maps.Geocoder();      
+		var propertyAddress = "${property.address}";
 function callback(results, status) {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
@@ -282,13 +281,13 @@ function callback(results, status) {
 		hotspotsList["hs04"][0] = "store";
 		hotspotsList["hs04"][1] = "boutique";
 		hotspotsList["hs05"][0] = "church";
-		hotspotsList["hs05"][1] = "église";
+		hotspotsList["hs05"][1] = "��glise";
 		hotspotsList["hs06"][0] = "synagogue";
 		hotspotsList["hs06"][1] = "synagogue";
 		hotspotsList["hs07"][0] = "mosque";
 		hotspotsList["hs07"][1] = "mosque";
 		hotspotsList["hs08"][0] = "grocery_or_supermarket";
-		hotspotsList["hs08"][1] = "épicerie";
+		hotspotsList["hs08"][1] = "��picerie";
 		hotspotsList["hs09"][0] = "pharmacy";
 		hotspotsList["hs09"][1] = "pharmacie";
 		hotspotsList["hs10"][0] = "movie_rental";
@@ -304,7 +303,7 @@ function callback(results, status) {
 		hotspotsList["hs15"][0] = "fire_station";
 		hotspotsList["hs15"][1] = "";
 		hotspotsList["hs16"][0] = "hospital";
-		hotspotsList["hs16"][1] = "hôpital";
+		hotspotsList["hs16"][1] = "h��pital";
 		hotspotsList["hs17"][0] = "health";
 		hotspotsList["hs17"][1] = "clinique mdicale";
 		hotspotsList["hs18"][0] = "subway_station";
@@ -314,9 +313,9 @@ function callback(results, status) {
 		hotspotsList["hs20"][0] = "";
 		hotspotsList["hs20"][1] = "daycare+garderie";
 		hotspotsList["hs21"][0] = "school";
-		hotspotsList["hs21"][1] = "elementary school+écolde primaire";
+		hotspotsList["hs21"][1] = "elementary school+��colde primaire";
 		hotspotsList["hs22"][0] = "school";
-		hotspotsList["hs22"][1] = "high school+école secondaire";
+		hotspotsList["hs22"][1] = "high school+��cole secondaire";
 		hotspotsList["hs23"][0] = "school";
 		hotspotsList["hs23"][1] = "college";
 		hotspotsList["hs24"][0] = "university";

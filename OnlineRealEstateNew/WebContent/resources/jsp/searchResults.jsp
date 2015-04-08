@@ -18,10 +18,6 @@
 		}
 	}
 
-	function AddID(propertyid) {
-		document.getElementById(propertyid).value = propertyid;
-	}
-
 	function RankbyLowestPrice() {
 		url = url.concat("&sort=by+Price%3A+low+to+high");
 		window.location.assign(url);
@@ -55,18 +51,20 @@
 		value="Rank by Newest Post" class="select"
 		onclick="RankbyNewestPost( )" />
 
-	<form id="property" action="offer" method="get">
 		<table style="width: 100%; background-color: white;" border="1">
 			<c:forEach var="list" items="${list}">
 				<tr>
 					<td align="center"><img
 						src="${pageContext.request.contextPath}/resources/images/${list.propertyid}.jpeg"
-						width="300" height="200" /> <br> <input type="submit"
-						id="${list.propertyid}" name="propertyid" value="Details"
-						class="select" onclick="AddID('${list.propertyid}')" /> <script>
+						width="300" height="200" /> <br> 
+	                    <form id="${list.propertyid}" action="details" method="get">
+						<input type="submit" value="Details" class="select"/> 
+                        <input type="hidden" id="${list.propertyid}" name="propertyid" value="${list.propertyid}"/> 
+						<script>
 							checkEnable('${list.propertyid}',
 									'${list.soldValue}')
 						</script>
+					    </form>
 						<span
 						style="font-weight: bold; font-style: italic; font-size: xx-large; color: red;">${list.soldValue}</span>
 						<br> Posted on : ${list.postDate}<br> Number of Offers
@@ -109,7 +107,6 @@
 						<p>${list.description}</p></td>
 			</c:forEach>
 		</table>
-	</form>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

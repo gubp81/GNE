@@ -12,7 +12,7 @@
 </head>
 <jsp:include page="header.jsp"></jsp:include>
 <body>
-<h1>Unable to update Database.</h1>
+<h1>${msg}</h1>
 <input type="button" name="Back" value="Back" onclick="history.go(-2);" />
 </body>
 <jsp:include page="footer.jsp"></jsp:include>

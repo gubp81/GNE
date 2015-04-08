@@ -24,14 +24,17 @@ public interface PropertyDao {
 			);
 
 	public PropertyBean getDetails(int propertyid);
-	
+
 	public String getSellersEmail(int propertyid);
-	
+
 	public boolean makeanOffer(int propertyid,
 			String name,
 			String phone,
 			String email,
 			String amount
 			);
-	public boolean offerDecision(int propertyid);
+	public List<OfferBean> listOffers(int propertyid);
+
+	public OfferBean offerDecision(int propertyid, int buyerid, String decision);
+
 }
