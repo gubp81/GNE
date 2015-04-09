@@ -30,13 +30,13 @@
 			<td><form id="${offers.buyerid}" action="decision" method="get">
 				<input type="hidden"	id="propertyid" name="propertyid" value="${offers.propertyid}" />
 				<input type="hidden"	id="buyerid" name="buyerid" value="${offers.buyerid}" />
-			    <input type="submit"id="action" name="Accept" value="Accept" class="select" /> 
+			    <input type="submit"id="action" name="action" value="Accept" class="select" /> 
 				</form>
 			</td>
 			<td><form id="${offers.buyerid}" action="decision" method="get">
 				<input type="hidden"	id="propertyid" name="propertyid" value="${offers.propertyid}" />
 				<input type="hidden"	id="buyerid" name="buyerid" value="${offers.buyerid}" />
-				<input type="submit"id="action" name="Reject" value="Reject" class="select" />
+				<input type="submit"id="action" name="action" value="Reject" class="select" />
 				</form>
 			</td>
 		</tr>

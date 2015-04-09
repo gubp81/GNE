@@ -137,8 +137,7 @@ public class MainController {
 	@RequestMapping(value="/decision", method=RequestMethod.GET)
 	public ModelAndView offerDecision( 
 			@RequestParam("propertyid") int propertyid,
-			@RequestParam("buyerid") int buyerid,
-			@RequestParam("email") String email, 
+			@RequestParam("buyerid") int buyerid, 
 			@RequestParam("action") String decision)
 	{
 		System.out.println("Came to controller offerDecision");
@@ -151,31 +150,37 @@ public class MainController {
 		offer = propdao.offerDecision(propertyid, buyerid,decision);
 		sellersEmail = propdao.getSellersEmail(propertyid);
 		if(offer.isaccepted){
+			//Buyer's Email
 			msg="Congratulations! Your offer was accepted. An email with your contact information was sent to Seller("+sellersEmail+"). You will be contacted soon.";
-
+			System.out.println(msg);
+			
 			MailMail mm = (MailMail) context.getBean("MailMail");
-			mm.sendMail(email,
+			mm.sendMail(offer.email,
 					offer.email,
 					"GNE Properties: Congratulations for you new home!", 
 					msg);
-
+			//Seller's Email
 			msg="Congratulations! You sold your property. An email confirming your decision was sent to the buyer. Here's buyer information for contact: Name:"+offer.name+".Email:"+offer.email+".Phone Number:"+offer.phone;
-
+			System.out.println(msg);
 			MailMail mm2 = (MailMail) context.getBean("MailMail");
-			mm2.sendMail(email,
+			mm2.sendMail(sellersEmail,
 					sellersEmail,
 					"GNE Properties: Offer Received", 
 					msg);}
 		else if (offer.isrejected){
+			//Buyer's Email
 			msg="Unfortunately, Your offer posted on "+offer.date+" of "+offer.amount+" was refused by the Seller. You can post another offer anytime at our system.";
+			System.out.println(msg);
 			MailMail mm = (MailMail) context.getBean("MailMail");
-			mm.sendMail(email,
+			mm.sendMail(offer.email,
 					offer.email,
 					"GNE Properties: Offer refused!", 
 					msg);
+			//Seller's Email
 			msg="An offer posted on "+offer.date+" of "+offer.amount+" was refused by you. An email confirming your decision will be send to the buyer.";
+			System.out.println(msg);
 			MailMail mm2 = (MailMail) context.getBean("MailMail");
-			mm2.sendMail(email,
+			mm2.sendMail(sellersEmail,
 					sellersEmail,
 					"GNE Properties: Offer of "+offer.amount+" Refused", 
 					msg);

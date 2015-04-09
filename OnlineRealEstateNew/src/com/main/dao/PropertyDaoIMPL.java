@@ -147,7 +147,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		}
 		System.out.println("User found: "+ buyer);	
 
-		sql="Insert into \"Offer\" ( buyerid, propertyid, amount, date) VALUES ('"+buyer+"','"+propertyid+"','"+amount+"',now())";
+		sql="Insert into \"Offer\" ( buyerid, propertyid, amount, date, isaccepted, isrejected) VALUES ('"+buyer+"','"+propertyid+"','"+amount+"',now(), false, false)";
 		System.out.println("SQL: "+sql);	
 		try {
 			row=getJdbcTemplate().update(sql);
@@ -168,7 +168,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 	public List<OfferBean> listOffers(int propertyid){
 		System.out.println("Offers");
 		//Requirement: Offers are only valid within 3 days
-		String sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+"and now()<=date+3";
+		String sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+"and now()<=date+3 and isaccepted = false and isrejected = false";
 		System.out.println("SQL: "+sql);	
 		List<OfferBean> offers = getJdbcTemplate().query(sql, new OfferRowMapper());
 		System.out.println("OfferRowMapper OK");
@@ -182,7 +182,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		String sql;
 		OfferBean offer= new OfferBean();
 		try {
-			if(decision=="Accept"){
+			if(decision.contains("Accept")){
 				sql="Update \"Offer\" set isaccepted = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
 				row=getJdbcTemplate().update(sql);
 				if(row==1){
@@ -194,7 +194,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 					offer.isaccepted = true;
 				}	
 			}
-			else if(decision=="Reject"){
+			else if(decision.contains("Reject")){
 				sql="Update \"Offer\" set isrejected = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
 				row=getJdbcTemplate().update(sql);	
 				offer.isrejected = true;
