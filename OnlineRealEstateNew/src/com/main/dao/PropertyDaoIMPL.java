@@ -166,13 +166,28 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 
 	@Override  	
 	public List<OfferBean> listOffers(int propertyid){
+		String sql;
 		System.out.println("Offers");
-		//Requirement: Offers are only valid within 3 days
-		String sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+"and now()<=date+3 and isaccepted = false and isrejected = false";
-		System.out.println("SQL: "+sql);	
-		List<OfferBean> offers = getJdbcTemplate().query(sql, new OfferRowMapper());
-		System.out.println("OfferRowMapper OK");
-		return offers;
+		try {
+			//Check if Property still available
+			sql="Select sold from \"Property\" where propertyid="+propertyid;
+			System.out.println("SQL: "+sql);
+
+			boolean sold=getJdbcTemplate().queryForObject(sql, Boolean.class);
+			if(!sold){
+
+				//Requirement: Offers are only valid within 3 days
+				sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+"and now()<=date+3 and isaccepted = false and isrejected = false";
+				System.out.println("SQL: "+sql);	
+				List<OfferBean> offers = getJdbcTemplate().query(sql, new OfferRowMapper());
+				System.out.println("OfferRowMapper OK");
+				return offers;
+			}else
+				System.out.println("Property was sold");
+		}
+		catch (DataAccessException e){	
+		}
+		return null;	
 	}
 
 
@@ -182,13 +197,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		String sql;
 		OfferBean offer= new OfferBean();
 		try {
+			sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+" and buyerid = "+buyerid;
+			offer = getJdbcTemplate().queryForObject(sql, new OfferRowMapper());
+
 			if(decision.contains("Accept")){
 				sql="Update \"Offer\" set isaccepted = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
 				row=getJdbcTemplate().update(sql);
 				if(row==1){
-					sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+" and buyerid = "+buyerid;
-					offer = getJdbcTemplate().queryForObject(sql, new OfferRowMapper());
-
 					sql="Update \"Property\" set solddate = now(), sold = true where propertyid = "+propertyid;
 					row=getJdbcTemplate().update(sql);
 					offer.isaccepted = true;

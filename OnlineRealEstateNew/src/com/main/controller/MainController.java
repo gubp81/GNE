@@ -47,17 +47,17 @@ public class MainController {
 		List<PropertyBean> list=null;
 
 		System.out.println("Search Values:"+
-				proptype+
-				size+
-				price+
-				region+
-				sort+
-				garage+
-				pool+
-				ac+
-				school+
-				metro+
-				hospital+
+				proptype+"\r\n"+
+				size+"\r\n"+
+				price+"\r\n"+
+				region+"\r\n"+
+				sort+"\r\n"+
+				garage+"\r\n"+
+				pool+"\r\n"+
+				ac+"\r\n"+
+				school+"\r\n"+
+				metro+"\r\n"+
+				hospital+"\r\n"+
 				shopping_mall);
 		list=propdao.searchAny(
 				proptype,
@@ -98,7 +98,7 @@ public class MainController {
 		posted = propdao.makeanOffer(propertyid, name, phone, email, amount); 
 		if (posted){
 
-			msg="Hello "+name+". You are closer to your new home! Your offer of $"+amount+" was sent to Seller's email. You will receive a email within 3 days with a reply if offer was accepted or not.";
+			msg="Hello "+name+". \r\nYou are closer to your new home!\r\n Your offer of $"+amount+" was sent to Seller's email. \r\nYou will receive a email within 3 days with a reply if offer was accepted or not.\r\nThank you,\r\nGNE Properties";
 
 			MailMail mm = (MailMail) context.getBean("MailMail");
 			mm.sendMail(email,
@@ -111,7 +111,7 @@ public class MainController {
 			mm2.sendMail(email,
 					sellersEmail,
 					"GNE Properties: Offer Received", 
-					"Good news! You just got an offer posted for your property. "+name+" made an offer of $"+amount+". Please follow the link to accept or reject: http://localhost:8080/gne/offers?propertyid="+propertyid);
+					"Good news! \r\n You just got an offer posted for your property. \r\n"+name+" made an offer of $"+amount+"\r\n. Please follow the link to accept or reject: http://localhost:8080/gne/offers?propertyid="+propertyid+"\r\nThank you,\r\n GNE Properties.");
 		}
 		else
 			msg="Error posting Offer. Please contact the Administrator.";
@@ -127,11 +127,14 @@ public class MainController {
 		System.out.println("Controller: Offer Decision");
 		offers = propdao.listOffers(propertyid);
 
-		for(int i=0;i<offers.size();i++){		
-			System.out.println("Property:"+offers.get(i).getpropertyid()+"-Buyer:"+offers.get(i).getbuyerid()+"-Offer:"+offers.get(i).getamount());
-		}		
-
-		return new ModelAndView("offers","offers",offers);
+		if (offers!=null){
+			for(int i=0;i<offers.size();i++){		
+				System.out.println("Property:"+offers.get(i).getpropertyid()+"-Buyer:"+offers.get(i).getbuyerid()+"-Offer:"+offers.get(i).getamount());
+			}
+			return new ModelAndView("offers","offers",offers);
+		}
+		String msg = "Property was sold or not found.";
+		return new ModelAndView("message","msg",msg);
 	}
 
 	@RequestMapping(value="/decision", method=RequestMethod.GET)
@@ -151,25 +154,25 @@ public class MainController {
 		sellersEmail = propdao.getSellersEmail(propertyid);
 		if(offer.isaccepted){
 			//Buyer's Email
-			msg="Congratulations! Your offer was accepted. An email with your contact information was sent to Seller("+sellersEmail+"). You will be contacted soon.";
+			msg="Congratulations! \r\nYour offer was accepted. An email with your contact information was sent to Seller("+sellersEmail+").\r\nYou will be contacted soon.\r\n\r\nThank you,\r\nGNE Properties.";
 			System.out.println(msg);
-			
+
 			MailMail mm = (MailMail) context.getBean("MailMail");
 			mm.sendMail(offer.email,
 					offer.email,
 					"GNE Properties: Congratulations for you new home!", 
 					msg);
 			//Seller's Email
-			msg="Congratulations! You sold your property. An email confirming your decision was sent to the buyer. Here's buyer information for contact: Name:"+offer.name+".Email:"+offer.email+".Phone Number:"+offer.phone;
+			msg="Congratulations! \r\n You sold your property. An email confirming your decision was sent to the buyer. \r\nHere's buyer information for contact: \r\n Name:"+offer.name+".\r\nEmail:"+offer.email+".\r\nPhone Number:"+offer.phone+"\r\nThank you,\r\nGNE Properties.";
 			System.out.println(msg);
 			MailMail mm2 = (MailMail) context.getBean("MailMail");
 			mm2.sendMail(sellersEmail,
 					sellersEmail,
-					"GNE Properties: Offer Received", 
+					"GNE Properties: Congratulations! You sold your property", 
 					msg);}
 		else if (offer.isrejected){
 			//Buyer's Email
-			msg="Unfortunately, Your offer posted on "+offer.date+" of "+offer.amount+" was refused by the Seller. You can post another offer anytime at our system.";
+			msg="Unfortunately, Your offer posted on "+offer.date+" of "+offer.amount+" was refused by the Seller. \r\nYou can post another offer anytime at our system.\r\n \r\nThank you,\r\nGNE Properties.";
 			System.out.println(msg);
 			MailMail mm = (MailMail) context.getBean("MailMail");
 			mm.sendMail(offer.email,
@@ -177,7 +180,7 @@ public class MainController {
 					"GNE Properties: Offer refused!", 
 					msg);
 			//Seller's Email
-			msg="An offer posted on "+offer.date+" of "+offer.amount+" was refused by you. An email confirming your decision will be send to the buyer.";
+			msg="An offer posted on "+offer.date+" of "+offer.amount+" was refused by you. \r\nAn email confirming your decision will be send to the buyer.\r\n \r\nThank you,\r\nGNE Properties.";
 			System.out.println(msg);
 			MailMail mm2 = (MailMail) context.getBean("MailMail");
 			mm2.sendMail(sellersEmail,
