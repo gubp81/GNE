@@ -45,7 +45,7 @@ public class MainController {
 			@RequestParam(required=false, value="shopping_mall") boolean shopping_mall
 			) {
 		List<PropertyBean> list=null;
-
+		String msg = "";
 		System.out.println("Search Values:"+
 				proptype+"\r\n"+
 				size+"\r\n"+
@@ -73,8 +73,9 @@ public class MainController {
 				hospital,
 				shopping_mall
 				);
-		if(list.size()==0)
-			return new ModelAndView("error","list", list);
+		if(list.size()==0){ 
+			msg="No Records Found with the search criteria. Please refine your search";
+			return new ModelAndView("message","msg", msg);}
 		return new ModelAndView("searchResults", "list", list);
 	}
 	@RequestMapping(value="/details", method=RequestMethod.GET)
