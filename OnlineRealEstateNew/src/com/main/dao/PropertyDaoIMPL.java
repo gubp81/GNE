@@ -57,15 +57,15 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 
 		//Price ranges
 		if(!price.equals("Click to Select")){
-			if(price.startsWith(String.valueOf('1')))
+			if(price.startsWith(String.valueOf('l')))
 				sql += " and price<'100000'";
-			if(price.startsWith(String.valueOf('2')))
+			if(price.startsWith(String.valueOf('1')))
 				sql += " and price>='100000' and price<'200000'";
-			if(price.startsWith(String.valueOf('3')))
+			if(price.startsWith(String.valueOf('2')))
 				sql += " and price>='200000' and price<'300000'";
-			if(price.startsWith(String.valueOf('4')))
+			if(price.startsWith(String.valueOf('3')))
 				sql += " and price>='300000' and price<'400000'";
-			if(price.startsWith(String.valueOf('5')))
+			if(price.startsWith(String.valueOf('m')))
 				sql += " and price>='400000'";
 		}
 		if(garage)
