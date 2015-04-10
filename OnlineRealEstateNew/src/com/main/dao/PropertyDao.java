@@ -37,4 +37,24 @@ public interface PropertyDao {
 
 	public OfferBean offerDecision(int propertyid, int buyerid, String decision);
 
+	public boolean post(
+			String name,
+			String phone,
+			String email,
+			String proptype,
+			String size,
+			int price,
+			String address,
+			String region,
+			int year,
+			String description,
+			boolean garage,
+			boolean pool,
+			boolean ac,
+			boolean school,
+			boolean metro,
+			boolean hospital,
+			boolean shopping_mall
+			);
+
 }

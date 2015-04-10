@@ -138,7 +138,7 @@ public class MainController {
 		return new ModelAndView("message","msg",msg);
 	}
 
-	@RequestMapping(value="/decision", method=RequestMethod.GET)
+	@RequestMapping(value="/decision", method=RequestMethod.POST)
 	public ModelAndView offerDecision( 
 			@RequestParam("propertyid") int propertyid,
 			@RequestParam("buyerid") int buyerid, 
@@ -192,4 +192,80 @@ public class MainController {
 		return new ModelAndView("message","msg",msg);	
 	}
 
+
+	@RequestMapping(value="/sell", method=RequestMethod.GET)
+	public ModelAndView sell( ){
+		return new ModelAndView("sell","",false);
+	}
+
+	@RequestMapping(value="/sell", method=RequestMethod.POST)
+	public ModelAndView sell(
+			@RequestParam("name") String name,
+			@RequestParam("phone") String phone,			
+			@RequestParam("email") String email,
+			@RequestParam("price") int price,	
+			@RequestParam("address") String address,
+			@RequestParam("region") String region,			
+			@RequestParam("proptype") String proptype,
+			@RequestParam("size") String size,
+			@RequestParam("year") int year,
+			@RequestParam(required=false, value="garage") boolean garage,
+			@RequestParam(required=false, value="pool") boolean pool,
+			@RequestParam(required=false, value="ac") boolean ac,			
+			@RequestParam(required=false, value="school") boolean school,
+			@RequestParam(required=false, value="metro") boolean metro,
+			@RequestParam(required=false, value="hospital") boolean hospital,
+			@RequestParam(required=false, value="shopping_mall") boolean shopping_mall,
+			@RequestParam("description") String description,
+			@RequestParam("image") String image)
+	{
+		String msg;
+		System.out.println("Came to controller Sell");
+		System.out.println("Parameters: "+name+ phone+ email+ 
+				proptype+
+				size+
+				price+
+				address+
+				region+
+				year+
+				description+
+				garage+
+				pool+
+				ac+
+				school+
+				metro+
+				hospital+
+				shopping_mall);
+		boolean posted=false;
+		posted = propdao.post(name, phone, email, 
+				proptype,
+				size,
+				price,
+				address,
+				region,
+				year,
+				description,
+				garage,
+				pool,
+				ac,
+				school,
+				metro,
+				hospital,
+				shopping_mall); 
+		if (posted){
+
+			msg="Hello "+name+". \r\nYour Property at "+address+" was successfully posted in our system.\r\nThank you,\r\nGNE Properties";
+
+			MailMail mm = (MailMail) context.getBean("MailMail");
+			mm.sendMail(email,
+					email,
+					"GNE Properties: Property post Confirmation", 
+					msg);		
+		}
+		else
+			msg="Error posting Property. Please contact the Administrator.";
+
+		return new ModelAndView("message","msg",msg);	
+
+	}
 }

@@ -27,13 +27,13 @@
 			<td>${offers.date}</td>
 			<td>${offers.name}</td>
 			<td>$${offers.amount}</td>
-			<td><form id="${offers.buyerid}" action="decision" method="get">
+			<td><form id="${offers.buyerid}" action="decision" method="post">
 				<input type="hidden"	id="propertyid" name="propertyid" value="${offers.propertyid}" />
 				<input type="hidden"	id="buyerid" name="buyerid" value="${offers.buyerid}" />
 			    <input type="submit"id="action" name="action" value="Accept" class="select" /> 
 				</form>
 			</td>
-			<td><form id="${offers.buyerid}" action="decision" method="get">
+			<td><form id="${offers.buyerid}" action="decision" method="post">
 				<input type="hidden"	id="propertyid" name="propertyid" value="${offers.propertyid}" />
 				<input type="hidden"	id="buyerid" name="buyerid" value="${offers.buyerid}" />
 				<input type="submit"id="action" name="action" value="Reject" class="select" />

@@ -46,10 +46,8 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			){
 
 		// Requirement to only show sold properties in past 15 days		
-		String sql="select * from \"Property\" where ( sold is FALSE"
+		String sql="select * from \"Property\" where ( sold <> 'true'"
 				+  " or now()<=solddate+15)";
-		System.out.println("SQL: "+sql);
-
 		if(!proptype.equals("Click to Select"))
 			sql+=" and proptype='"+proptype+"'";
 		if(!size.equals("Click to Select"))
@@ -97,6 +95,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		else if(sort.equals("by PostDate: oldest first")){
 			sql+=" order by postdate asc";			
 		}
+		System.out.println("SQL: "+sql);
 		List<PropertyBean> list = getJdbcTemplate().query(sql, new PropertyRowMapper());
 		return list;
 	}
@@ -126,7 +125,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		int buyer = 0, row = 0;
 		String sql, sqlUser;
 
-		sqlUser="Select userid from \"User\" where email ='"+email+"'";
+		sqlUser="Select userid from \"User\" where email ='"+email+"' and type = 2";
 		System.out.println("SQL: "+sqlUser);
 
 		try {
@@ -136,7 +135,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		}
 		if(buyer==0){
 			System.out.println("User not found");	
-			sql="Insert into \"User\" ( name, phone, email, type) VALUES ('"+name+"','"+phone+"','"+email+"',1)";
+			sql="Insert into \"User\" ( name, phone, email, type) VALUES ('"+name+"','"+phone+"','"+email+"',2)";
 			System.out.println("SQL: "+sql);
 			try {
 				buyer=getJdbcTemplate().update(sql);
@@ -157,9 +156,10 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			//Increase number of offers for this Property
 			sql="Update \"Property\" set offersmade = offersmade + 1 where propertyid = "+propertyid;
 			row=getJdbcTemplate().update(sql);
-			if(row==1)
+			if(row==1){ 
 				System.out.println("Offer successfully posted");
-			return true;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -220,6 +220,76 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		return offer;
 	}
 
+	@Override
+	public boolean post(
+			String name,
+			String phone,
+			String email,
+			String proptype,
+			String size,
+			int price,
+			String address,
+			String region,
+			int year,
+			String description,
+			boolean garage,
+			boolean pool,
+			boolean ac,
+			boolean school,
+			boolean metro,
+			boolean hospital,
+			boolean shopping_mall
+			){
+		int seller = 0, row = 0;
+		String sql, sqlUser;
+
+		sqlUser="Select userid from \"User\" where email ='"+email+"' and type = 1";
+		System.out.println("SQL: "+sqlUser);
+
+		try {
+			seller=getJdbcTemplate().queryForInt(sqlUser);			
+		} catch (DataAccessException e){
+
+		}
+		if(seller==0){
+			System.out.println("User not found");	
+			sql="Insert into \"User\" ( name, phone, email, type) VALUES ('"+name+"','"+phone+"','"+email+"',1)";
+			System.out.println("SQL: "+sql);
+			try {
+				seller=getJdbcTemplate().update(sql);
+				seller=getJdbcTemplate().queryForInt(sqlUser);
+			} catch (DataAccessException e1) {
+				e1.printStackTrace();
+			}				
+		}
+		System.out.println("User found: "+ seller);	
+
+		sql="Insert into \"Property\" ( postdate,proptype,size,price,address,region,seller,description,garage,pool,ac,school,metro,hospital,year) VALUES ( now(),'"
+				+proptype
+				+"','"+size
+				+"','"+price
+				+"','"+address
+				+"','"+region
+				+"','"+seller
+				+"','"+description
+				+"','"+garage
+				+"','"+pool
+				+"','"+ac
+				+"','"+school
+				+"','"+metro
+				+"','"+hospital
+				+"','"+year+"')";
+		System.out.println("SQL: "+sql);	
+		try {
+			row=getJdbcTemplate().update(sql);
+			if(row==1){ 
+				System.out.println("Property successfully posted");
+				return true;
+			}
+		} catch (DataAccessException e){	
+		}
+		return false;					
+	}
 
 }
 

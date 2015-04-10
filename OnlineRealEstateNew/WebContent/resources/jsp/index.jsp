@@ -71,7 +71,7 @@ Price From<select name="price" class="select">
 </select>
 </td></tr>
 </table>
-<input type="submit" value="Search" height="100px" width="100px" align="middle">
+<input type="submit" value="Search" height="100px" width="100px" align="middle" class="select">
 </form>
 <table width="100%">
 <tr>

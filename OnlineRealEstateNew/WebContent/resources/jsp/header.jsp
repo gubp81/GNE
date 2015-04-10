@@ -8,10 +8,11 @@
 </head>
 <body class="head">
 <table border=0>
-<tr height="50px"><td	width=5%><img src="${pageContext.request.contextPath}/resources/images/2.png"height="50"></td>
-<td class="center" width=80%><h2>GNE Properties: Find your home-Realize your dreams!</h2></td>
-<td><a href="${pageContext.request.contextPath}">Home</a></td>
-<td><a href="mailto:propertiesGNE@gmail.com?Subject=Contact Us" target="_top">Contact Us</a></td>
+<tr height="50px"><td	width=5%><img src="${pageContext.request.contextPath}/resources/images/logo.jpg"height="50"></td>
+<td class="center" width=65%><h2>GNE Properties: Find your home-Realize your dreams!</h2></td>
+<td width=15%><form action="sell" method="get"><input type="submit" class="select" value= "Sell your Property!"/></form></td>
+<td width=5%><a href="${pageContext.request.contextPath}">Home</a></td>
+<td width=10%><a href="mailto:propertiesGNE@gmail.com?Subject=Contact Us" target="_top">Contact Us</a></td>
 </tr>
 </table>
 </body>

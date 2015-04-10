@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Insert title here</title>
+<title>Search Results</title>
 
 <script type="text/javascript">
 	var url = window.location.toString();
@@ -55,7 +55,7 @@
 			<c:forEach var="list" items="${list}">
 				<tr>
 					<td align="center"><img
-						src="${pageContext.request.contextPath}/resources/images/${list.propertyid}.jpeg"
+						src="${pageContext.request.contextPath}/resources/images/${list.propertyid}.jpg"
 						width="300" height="200" /> <br> 
 	                    <form id="${list.propertyid}" action="details" method="get">
 						<input type="submit" value="Details" class="select"/> 

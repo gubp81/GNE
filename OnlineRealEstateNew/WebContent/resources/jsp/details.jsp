@@ -13,10 +13,24 @@
 <jsp:include page="header.jsp"></jsp:include>
 <body>
 	<form action="makeanoffer" method="post">
+		<div class="esu">
+			<h1>Make an Offer</h1>
+			<table width="80%" height="100%">
+				<tr>
+					<td>Name: <input type="text" name="name"> <br>
+						Phone Number: <input type="text" name="phone"> <br>
+						Email: <input type="text" name="email"> <br> Offer
+						Price: <input type="text" name="amount"> <br> <input
+						type="submit" value="Submit"> <input type="button"
+						name="Cancel" value="Cancel" onclick="history.go(-1);" />
+					</td>
+				</tr>
+			</table>
+		</div>	
 		<table style="width: 100%; background-color: white;" border="0">
 			<tr>
 				<td align="center" style="width: 30%;"><img
-					src="${pageContext.request.contextPath}/resources/images/${property.propertyid}.jpeg"
+					src="${pageContext.request.contextPath}/resources/images/${property.propertyid}.jpg"
 					width="300" height="200" /> <br> <span
 					style="font-weight: bold; font-style: italic; font-size: xx-large; color: red;">${property.soldValue}</span>
 					Posted on : ${property.postDate} <br> Number of Offers made:
@@ -91,22 +105,6 @@
 				</td>
 			</tr>
 		</table>
-
-
-		<div class="esu">
-			<h1>Make an Offer</h1>
-			<table width="80%" height="100%">
-				<tr>
-					<td>Name: <input type="text" name="name"> <br>
-						Phone Number: <input type="text" name="phone"> <br>
-						Email: <input type="text" name="email"> <br> Offer
-						Price: <input type="text" name="amount"> <br> <input
-						type="submit" value="Submit"> <input type="button"
-						name="Cancel" value="Cancel" onclick="history.go(-1);" />
-					</td>
-				</tr>
-			</table>
-		</div>
 	</form>
 
 	<script type="text/javascript">
