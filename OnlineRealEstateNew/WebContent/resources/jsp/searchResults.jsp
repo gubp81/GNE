@@ -12,12 +12,6 @@
 	var res = url.split("&sort=");
 	url = res[0];
 
-	function checkEnable(propertyid, sold) {
-		if (sold == "Sold") {
-			document.getElementById(propertyid).disabled = true;
-		}
-	}
-
 	function RankbyLowestPrice() {
 		url = url.concat("&sort=by+Price%3A+low+to+high");
 		window.location.assign(url);
@@ -58,11 +52,11 @@
 						src="${pageContext.request.contextPath}/resources/images/${list.propertyid}.jpg"
 						width="300" height="200" /> <br> 
 	                    <form id="${list.propertyid}" action="details" method="get">
-						<input type="submit" value="Details" class="select"/> 
+						<input type="submit" id="submit${list.propertyid}" value="Details" class="select"/> 
                         <input type="hidden" id="${list.propertyid}" name="propertyid" value="${list.propertyid}"/> 
 						<script>
-							checkEnable('${list.propertyid}',
-									'${list.soldValue}')
+						if ("${list.soldValue}" == "Sold")
+							document.getElementById("submit${list.propertyid}").disabled = true;
 						</script>
 					    </form>
 						<span

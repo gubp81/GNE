@@ -13,7 +13,7 @@
 <jsp:include page="header.jsp"></jsp:include>
 <body>
 <h1>${msg}</h1>
-<input type="button" name="Back" value="Back" onclick="history.go(-2);" />
+<input type="button" name="Back" value="Back" onclick="history.go(-1);" />
 </body>
 <jsp:include page="footer.jsp"></jsp:include>
 </html>
