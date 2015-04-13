@@ -55,15 +55,14 @@ if (errors.length > 0) {
     <div>
 	<form name="offer" action="makeanoffer" method="post" onsubmit="return validate(this)">
 		<div id="offerdiv" class="esu">
-			<h1>Make an Offer</h1>
+			<h1>Make an Offer for this Property!</h1>
 			<table width="80%" height="100%">
 				<tr>
 					<td>Name: <input type="text" name="name" required> <br>
 						Phone Number: <input type="number" name="phone" required> (numbers only)<br>
 						Email: <input type="text" name="email" required> <br> Offer
 						Price: <input type="text" name="amount" value="${property.price}" required><br> <input
-						type="submit" value="Submit"> <input type="button"
-						name="Cancel" value="Cancel" onclick="history.go(-1);" />
+						type="submit" value="Submit Offer" class= "select">
 					</td>
 				</tr>
 			</table>	
