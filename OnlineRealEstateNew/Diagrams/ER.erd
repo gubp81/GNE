@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="ER.erd" time="201504130210">
+	<entities>
+		<data-source id="postgresql-1428948553308-1829705027">
+			<entity id="1" name="Offer" fq-name="public.&quot;Offer&quot;" x="266" y="399">
+				<path name="public"/>
+			</entity>
+			<entity id="2" name="Property" fq-name="public.&quot;Property&quot;" x="121" y="20">
+				<path name="public"/>
+			</entity>
+			<entity id="3" name="User" fq-name="public.&quot;User&quot;" x="20" y="420">
+				<path name="public"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="buyerid" fq-name="public.&quot;Offer&quot;.buyerid" type="fk" pk-ref="1" fk-ref="3"/>
+		<relation name="properytid" fq-name="public.&quot;Offer&quot;.properytid" type="fk" pk-ref="1" fk-ref="2"/>
+		<relation name="seller" fq-name="public.&quot;Property&quot;.seller" type="fk" pk-ref="2" fk-ref="3"/>
+	</relations>
+	<notes/>
+</diagram>
