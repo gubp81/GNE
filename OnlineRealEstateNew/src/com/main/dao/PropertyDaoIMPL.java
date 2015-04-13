@@ -131,7 +131,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		try {
 			buyer=getJdbcTemplate().queryForInt(sqlUser);			
 		} catch (DataAccessException e){
-
+			e.printStackTrace();
 		}
 		if(buyer==0){
 			System.out.println("User not found");	
@@ -186,6 +186,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 				System.out.println("Property was sold");
 		}
 		catch (DataAccessException e){	
+			e.printStackTrace();
 		}
 		return null;	
 	}
@@ -197,9 +198,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		String sql;
 		OfferBean offer= new OfferBean();
 		try {
-			sql = "select * from \"Offer\" INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+" and buyerid = "+buyerid;
+			sql = "select * from \"Offer\" INNER JOIN \"Property\" ON (\"Offer\".propertyid = \"Property\".propertyid) INNER JOIN \"User\" ON (\"Offer\".buyerid = \"User\".userid) where \"Offer\".propertyid="+propertyid+" and \"Property\".sold <> true and buyerid = "+buyerid;
 			offer = getJdbcTemplate().queryForObject(sql, new OfferRowMapper());
-
+			System.out.println(sql);
+			if (offer==null||offer.isaccepted==true||offer.isrejected==true||offer.sold==true){
+				System.out.println("null");
+				return null;
+			}
 			if(decision.contains("Accept")){
 				sql="Update \"Offer\" set isaccepted = true where propertyid = "+propertyid+" and buyerid = "+buyerid;
 				row=getJdbcTemplate().update(sql);
@@ -216,12 +221,13 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			}
 		}
 		catch (DataAccessException e){	
+			e.printStackTrace();
 		}
 		return offer;
 	}
 
 	@Override
-	public boolean post(
+	public int post(
 			String name,
 			String phone,
 			String email,
@@ -240,7 +246,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 			boolean hospital,
 			boolean shopping_mall
 			){
-		int seller = 0, row = 0;
+		int propertyid = 0, seller = 0, row = 0;
 		String sql, sqlUser;
 
 		sqlUser="Select userid from \"User\" where email ='"+email+"' and type = 1";
@@ -249,7 +255,7 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		try {
 			seller=getJdbcTemplate().queryForInt(sqlUser);			
 		} catch (DataAccessException e){
-
+			e.printStackTrace();
 		}
 		if(seller==0){
 			System.out.println("User not found");	
@@ -282,15 +288,40 @@ public class PropertyDaoIMPL extends JdbcDaoSupport implements PropertyDao{
 		System.out.println("SQL: "+sql);	
 		try {
 			row=getJdbcTemplate().update(sql);
-			if(row==1){ 
-				System.out.println("Property successfully posted");
-				return true;
+			if(row!=0){ 
+				sql="SELECT propertyid from \"Property\" ORDER BY propertyid DESC LIMIT 1"; 
+				System.out.println("SQL: "+sql);
+				propertyid = (int) getJdbcTemplate().queryForInt(sql);
+				System.out.println("Property"+ propertyid +" successfully posted");
+				return propertyid;
 			}
 		} catch (DataAccessException e){	
+			e.printStackTrace();
 		}
-		return false;					
+		return 0;					
 	}
 
+	@Override
+	public void remove( int propertyid ){
+		int row = 0;
+		String sql="Delete from \"Property\" where propertyid = "+propertyid;
+		System.out.println("SQL: "+sql);	
+		try {
+			row = getJdbcTemplate().update(sql);
+		} catch (DataAccessException e){	
+			e.printStackTrace();
+		}
+		if (row==0){
+			try {
+				sql="Update \"Property\" set solddate = now(), sold = true where propertyid = "+propertyid+
+						"; Update \"Property\" set solddate = solddate-15 where propertyid = "+ propertyid;
+				row=getJdbcTemplate().update(sql);
+			} catch (DataAccessException e){	
+				e.printStackTrace();
+			}
+		}
+		return;
+	}
 }
 
 class PropertyRowMapper implements RowMapper<PropertyBean>{

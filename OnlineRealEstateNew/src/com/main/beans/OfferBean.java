@@ -15,6 +15,7 @@ public class OfferBean {
 	public String email;
 	public boolean isaccepted;
 	public boolean isrejected;
+	public boolean sold;
 	
 	/**
 	 * @return the propertyid

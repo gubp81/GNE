@@ -37,7 +37,7 @@ public interface PropertyDao {
 
 	public OfferBean offerDecision(int propertyid, int buyerid, String decision);
 
-	public boolean post(
+	public int post(
 			String name,
 			String phone,
 			String email,
@@ -56,5 +56,7 @@ public interface PropertyDao {
 			boolean hospital,
 			boolean shopping_mall
 			);
+	
+	public void remove( int propertyid );
 
 }

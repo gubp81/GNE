@@ -80,7 +80,7 @@ public class MainController {
 	}
 	@RequestMapping(value="/details", method=RequestMethod.GET)
 	public ModelAndView MakeanOffer(
-			@RequestParam("propertyid") int propertyid			){
+			@RequestParam("propertyid") int propertyid ){
 		PropertyBean property = propdao.getDetails(propertyid);
 		return new ModelAndView("details","property",property);		
 	}
@@ -152,6 +152,12 @@ public class MainController {
 
 		System.out.println("Controller: Offer Decision"+"Property:"+propertyid+"-Buyer:"+buyerid+"Decision:"+decision);
 		offer = propdao.offerDecision(propertyid, buyerid,decision);
+		if(offer==null){
+			msg="This offer is not valid anymore. If you have any question contact our Administration.";
+			System.out.println(msg);
+			return new ModelAndView("message","msg",msg);	
+		}
+
 		sellersEmail = propdao.getSellersEmail(propertyid);
 		if(offer.isaccepted){
 			//Buyer's Email
@@ -194,7 +200,17 @@ public class MainController {
 
 
 	@RequestMapping(value="/sell", method=RequestMethod.GET)
-	public ModelAndView sell( ){
+	public ModelAndView sell(
+			@RequestParam(required=false, value="deleteFlag", defaultValue = "false") boolean deleteFlag,
+			@RequestParam(required=false, value="propertyid", defaultValue = "0") int propertyid)
+	{
+		String msg = "";
+		System.out.println("Came to controller sell GET.Property"+propertyid+" Delflag:"+deleteFlag);
+		if(deleteFlag){
+			propdao.remove(propertyid);
+			msg= "Property successfully deleted from our system";
+			return new ModelAndView("message","msg",msg);
+		}		
 		return new ModelAndView("sell","",false);
 	}
 
@@ -216,10 +232,10 @@ public class MainController {
 			@RequestParam(required=false, value="metro") boolean metro,
 			@RequestParam(required=false, value="hospital") boolean hospital,
 			@RequestParam(required=false, value="shopping_mall") boolean shopping_mall,
-			@RequestParam("description") String description,
-			@RequestParam("image") String image)
+			@RequestParam(required=false, value="description") String description,
+			@RequestParam(required=false, value="image") String image)
 	{
-		String msg;
+		String msg = "";
 		System.out.println("Came to controller Sell");
 		System.out.println("Parameters: "+name+ phone+ email+ 
 				proptype+
@@ -235,9 +251,11 @@ public class MainController {
 				school+
 				metro+
 				hospital+
-				shopping_mall);
-		boolean posted=false;
-		posted = propdao.post(name, phone, email, 
+				shopping_mall+
+				image);
+		int propertyid = 0;
+
+		propertyid = propdao.post(name, phone, email, 
 				proptype,
 				size,
 				price,
@@ -252,15 +270,20 @@ public class MainController {
 				metro,
 				hospital,
 				shopping_mall); 
-		if (posted){
+		if (propertyid!=0){
 
-			msg="Hello "+name+". \r\nYour Property at "+address+" was successfully posted in our system.\r\nThank you,\r\nGNE Properties";
+			msg="Hello "+name+". \r\nYour Property at "+address+" was successfully posted in our system."
+					+ "You can access see details of your property here: http://localhost:8080/gne/details?propertyid="+propertyid
+					+ "\r\n You can delete this ad anytime until no offer is posted, by clicking here: http://localhost:8080/gne/sell?propertyid="+propertyid+"&deleteFlag=true \r\nThank you,\r\nGNE Properties";
 
 			MailMail mm = (MailMail) context.getBean("MailMail");
 			mm.sendMail(email,
 					email,
 					"GNE Properties: Property post Confirmation", 
 					msg);		
+			PropertyBean property = propdao.getDetails(propertyid);
+			property.setSoldValue("Sold");
+			return new ModelAndView("details","property",property);		
 		}
 		else
 			msg="Error posting Property. Please contact the Administrator.";

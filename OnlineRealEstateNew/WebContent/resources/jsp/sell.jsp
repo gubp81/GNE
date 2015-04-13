@@ -5,24 +5,58 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Sell your Property</title>
+<script>
+var rephone = /^\d{10}$/;  
+var reemail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i ;
+
+function validate(form) {
+    var phone = form.phone.value;
+    var email = form.email.value;
+    var price = form.price.value;
+    var errors = [];
+    
+    if(!rephone.test(phone)) {
+    	errors[errors.length] = "Phone is not valid.";
+    }
+    if(!reemail.test(email)){
+    	errors[errors.length] = "Email is not valid.";
+     }
+    if (price == 0) {
+    	errors[errors.length] ="Price is not valid";
+    }   
+if (errors.length > 0) {
+	  reportErrors(errors);
+	  return false;
+	 }
+	  return true;
+	}
+	
+	function reportErrors(errors){
+	 var msg = "Please Enter Valide Data...\n";
+	 for (var i = 0; i<errors.length; i++) {
+	 var numError = i + 1;
+	  msg += "\n" + numError + ". " + errors[i];
+	}
+	 alert(msg);
+	}
+</script>
 </head>
 <jsp:include page="header.jsp"></jsp:include>
 <body>
-	<form action="sell" method="post">
+	<form name="sell" onsubmit="return validate(this)" action="sell" method="post">
 		<div class="esu">
 			<h1>Post a new property</h1>
 			<table width="80%" height="100%">
 				<tr>
 					<td><br>
 					<h2>Seller:</h2>
-						<br> Name: <input type="text" name="name"> <br>
-						Phone Number: <input type="text" name="phone"> <br>
-						Email: <input type="text" name="email"> <br> <br>
+						<br> Name: <input type="text" name="name" required> <br>
+						Phone Number: <input type="number" name="phone" required> (numbers only)<br>
+						Email: <input type="text" name="email" required> <br> <br>
 					<h2>Property</h2>
-						<br> Price: <input type="text" name="price"> <br>
-						Address: <input type="text" name="address"> <br>
-						Region<select name="region" class="select">
-							<option>Click to Select</option>
+						<br> Price: <input type="number" name="price" required> (numbers only)<br>
+						Address: <input type="text" name="address" required> <br>
+						Region<select name="region" class="select" required>
 							<option>Montreal Downtown</option>
 							<option>Montreal East</option>
 							<option>Montreal West</option>
@@ -31,18 +65,16 @@
 							<option>North Shore</option>
 							<option>South Shore</option>
 					</select><br> Property Type:<select name="proptype" class="select">
-							<option>Click to Select</option>
 							<option>Condo</option>
 							<option>Residential</option>
 					</select><br> Number of Rooms:<select name="size" class="select">
-							<option>Click to Select</option>
 							<option>1</option>
 							<option>2</option>
 							<option>3</option>
 							<option>4</option>
 							<option>5+</option>
 					</select><br> <br>
-					Year of Construction: <input type="text" name="year"> <br>
+					Year of Construction: <input type="number" name="year" required> <br>
 					<h2>Choose by Amenities:</h2>
 						<br> <input type="checkbox" name="garage">Garage<br>
 						<input type="checkbox" name="pool">Pool<br> <input

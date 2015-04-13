@@ -23,6 +23,7 @@ public class OfferExtractor implements ResultSetExtractor<OfferBean> {
 		offer.name=rs.getString("name");
 		offer.phone=rs.getString("phone");
 		offer.email=rs.getString("email");
+		offer.sold=rs.getBoolean("sold");
 		return offer;
 
 	}

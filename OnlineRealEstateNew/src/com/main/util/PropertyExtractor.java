@@ -26,7 +26,6 @@ public class PropertyExtractor implements ResultSetExtractor<PropertyBean> {
 		prop.setRegion(rs.getString("region"));
 		prop.setYear(rs.getInt("year"));			
 		prop.setDescription(rs.getString("description"));
-
 		
 		if(rs.getBoolean("garage")){
 			prop.setGarageValue("Garage");

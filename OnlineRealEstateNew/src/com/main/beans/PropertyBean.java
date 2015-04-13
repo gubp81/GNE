@@ -36,6 +36,7 @@ public class PropertyBean {
 	private String acValue;
 	private int year;
 	
+	private boolean hideOffer;
 
 	/**
 	 * @return the year
@@ -339,7 +340,7 @@ public class PropertyBean {
 	 */
 	public void setSoldValue(String soldValue) {
 		this.soldValue = soldValue;
-	}
+	}	
 	
 }
 

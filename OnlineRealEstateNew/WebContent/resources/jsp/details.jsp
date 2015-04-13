@@ -9,30 +9,75 @@
 <link rel="stylesheet" type="text/css"
 	href="http://www.belcourtcondos.com/assets/_combinedfiles/general.css?m=1405434178" />
 <title>Property Details</title>
+<script>
+var rephone = /^\d{10}$/;  
+var reemail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i ;
+
+function validate(form) {
+    var phone = form.phone.value;
+    var email = form.email.value;
+    var amount = form.amount.value;
+    var errors = [];
+    
+    if(!rephone.test(phone)) {
+    	errors[errors.length] = "Phone is not valid.";
+    }
+    if(!reemail.test(email)){
+    	errors[errors.length] = "Email is not valid.";
+     }
+    if (amount == 0) {
+    	errors[errors.length] ="Amount is not valid";
+    }   
+if (errors.length > 0) {
+	  reportErrors(errors);
+	  return false;
+	 }
+	  return true;
+	}
+	
+	function reportErrors(errors){
+	 var msg = "Please Enter Valide Data...\n";
+	 for (var i = 0; i<errors.length; i++) {
+	 var numError = i + 1;
+	  msg += "\n" + numError + ". " + errors[i];
+	}
+	 alert(msg);
+	}
+	
+	 if("${property.soldValue}"=="Sold"){
+		 alert("Property succesfully posted!");
+	 }
+	</script>
 </head>
 <jsp:include page="header.jsp"></jsp:include>
 <body>
-	<form action="makeanoffer" method="post">
-		<div class="esu">
+
+    <div>
+	<form name="offer" action="makeanoffer" method="post" onsubmit="return validate(this)">
+		<div id="offerdiv" class="esu">
 			<h1>Make an Offer</h1>
 			<table width="80%" height="100%">
 				<tr>
-					<td>Name: <input type="text" name="name"> <br>
-						Phone Number: <input type="text" name="phone"> <br>
-						Email: <input type="text" name="email"> <br> Offer
-						Price: <input type="text" name="amount"> <br> <input
+					<td>Name: <input type="text" name="name" required> <br>
+						Phone Number: <input type="number" name="phone" required> (numbers only)<br>
+						Email: <input type="text" name="email" required> <br> Offer
+						Price: <input type="text" name="amount" value="${property.price}" required><br> <input
 						type="submit" value="Submit"> <input type="button"
 						name="Cancel" value="Cancel" onclick="history.go(-1);" />
 					</td>
 				</tr>
-			</table>
-		</div>	
+			</table>	
+		</div>
+		<script>
+		 if("${property.soldValue}"=="Sold"){
+			 document.getElementById("offerdiv").style.display = "none";
+		 }
+		</script>	
 		<table style="width: 100%; background-color: white;" border="0">
 			<tr>
 				<td align="center" style="width: 30%;"><img
 					src="${pageContext.request.contextPath}/resources/images/${property.propertyid}.jpg"
-					width="300" height="200" /> <br> <span
-					style="font-weight: bold; font-style: italic; font-size: xx-large; color: red;">${property.soldValue}</span>
+					width="300" height="200" /> <br>
 					Posted on : ${property.postDate} <br> Number of Offers made:
 					${property.offers}
 					<input type="hidden" name="propertyid" value="${property.propertyid}"> <br>
@@ -106,7 +151,7 @@
 			</tr>
 		</table>
 	</form>
-
+</div>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
 
