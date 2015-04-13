@@ -45,7 +45,7 @@ if (errors.length > 0) {
 	}
 	
 	 if("${property.soldValue}"=="Sold"){
-		 alert("Property succesfully posted!");
+		 alert("Property successfully posted!");
 	 }
 	</script>
 </head>
